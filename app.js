@@ -4,9 +4,10 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+const search = document.getElementById('search');
+
 // selected image 
 let sliders = [];
-
 
 // If this key doesn't work
 // Find the name in the url and go to their website
@@ -131,32 +132,43 @@ const changeSlide = (index) => {
 
   items[index].style.display = "block"
 }
-
+// searchbutton click event
 searchBtn.addEventListener('click', function () {
+  if(search.value == ''){
+    alert('You have to search something')
+  }
+  else{
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   const search = document.getElementById('search');
   getImages(search.value)
   sliders.length = 0;
+  }
 })
 
+// slider button click event
 sliderBtn.addEventListener('click', function () {
   let duration = document.getElementById('duration').value || 1000;
     if(duration < 1000){
-      alert('Time gap is too little')
+      alert('Time gap is too little, you can try the default gap')
     }
     else{
     createSlider()
     }
 })
-// enter key press
-const search = document.getElementById('search');
+// enter key press function
 search.addEventListener('keyup', function(e){
   if(e.key == 'Enter'){
     searchBtn.click()
   }
 })
-
+// slider key press function
+duration.addEventListener('keyup', function(e){
+  if(e.key == 'Enter'){
+    sliderBtn.click()
+  }
+})
+// toggle spinner function
 const toggleSpinner = ()=> {
   const spinner = document.getElementById('spinner');
   spinner.classList.toggle('d-none')
