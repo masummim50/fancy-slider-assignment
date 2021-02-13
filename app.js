@@ -32,10 +32,27 @@ const showImages = (images) => {
 }
 
 const getImages = (query) => {
+  gallery.innerHTML = '';
+  galleryHeader.style.display = 'none';
+  document.getElementById('duration').value = '';
   toggleSpinner()
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hits))
+    .then(data => {
+      if(data.hits.length<2){
+        toggleSpinner()
+        search.value = ''
+        const notFound = document.getElementById('not-enough-images');
+        notFound.classList.toggle('d-none')
+        setTimeout(() => {
+          notFound.classList.toggle('d-none')
+        }, 3000);
+      }
+      else{
+        showImages(data.hits)
+        search.value = ''
+      }
+    })
     .catch(err => console.log(err))
 }
 
