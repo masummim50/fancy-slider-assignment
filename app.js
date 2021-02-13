@@ -13,6 +13,8 @@ let sliders = [];
 // to create your own api key
 const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
+
+
 // show images 
 const showImages = (images) => {
   imagesArea.style.display = 'block';
@@ -25,10 +27,12 @@ const showImages = (images) => {
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
   })
+  toggleSpinner()
 
 }
 
 const getImages = (query) => {
+  toggleSpinner()
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -39,16 +43,12 @@ let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.toggle('added');
-  console.log(img)
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
-    console.log(sliders)
   } 
   if(item !== -1) {
-    console.log(item)
     sliders.splice(item, 1)
-    console.log(sliders)
   }
 }
 var timer
@@ -71,7 +71,8 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  let duration = document.getElementById('duration').value || 1100;
+  
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -86,6 +87,7 @@ const createSlider = () => {
     changeSlide(slideIndex);
   }, duration);
 }
+
 
 // change slider index 
 const changeItem = index => {
@@ -122,5 +124,23 @@ searchBtn.addEventListener('click', function () {
 })
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
+  let duration = document.getElementById('duration').value || 1000;
+    if(duration < 1000){
+      alert('Time gap is too little')
+    }
+    else{
+    createSlider()
+    }
 })
+// enter key press
+const search = document.getElementById('search');
+search.addEventListener('keyup', function(e){
+  if(e.key == 'Enter'){
+    searchBtn.click()
+  }
+})
+
+const toggleSpinner = ()=> {
+  const spinner = document.getElementById('spinner');
+  spinner.classList.toggle('d-none')
+}
